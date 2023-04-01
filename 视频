@@ -1,0 +1,14 @@
+import subprocess
+
+
+# 视频流地址
+video_url = "/dev/video0"
+
+# 推流地址
+push_url = "rtmp://47.99.31.217:1935/stream/live"
+
+# 使用subprocess启动ffmpeg进程，并将视频流推送到指定地址
+p = subprocess.Popen(['ffmpeg', '-re', '-i', video_url, '-f', 'v412', '-f', 'flv', push_url])
+
+# 等待进程结束
+p.wait()
