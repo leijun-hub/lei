@@ -1,0 +1,26 @@
+from fastapi import FastAPI
+from starlette.responses import StreamingResponse
+from temp import MLX90614
+from video import generate_video
+app = FastAPI()
+
+sensor = MLX90614()
+print("温度传感器初始化完成！")
+
+
+@app.get("/temp")
+async def humna_temp():
+    return sensor.get_obj_temp()
+
+
+
+@app.get("/video")
+async def video_feed():
+    return StreamingResponse(generate_video(), media_type="multipart/x-mixed-replace;boundary=frame")
+
+
+
+@app.get("/")
+async def ping():
+    return "pong!"
+    
