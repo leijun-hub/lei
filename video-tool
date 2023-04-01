@@ -1,0 +1,15 @@
+import cv2
+
+
+async def generate_video():
+    cap = cv2.VideoCapture(0)
+    (status, frame_raw) = cap.read()
+    while status:
+        (status, frame_raw) = cap.read()
+        processed_frame = frame_raw
+
+        # 将处理后的帧发送到客户端
+        ret, buffer = cv2.imencode('.jpg', processed_frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
